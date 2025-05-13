@@ -1,0 +1,102 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -------------------------------------------------------------------------------------------------
+// User model
+// -------------------------------------------------------------------------------------------------
+// This model represents a user in the system
+// It includes fields for the user's name, email, password, and timestamps
+// The id field is the primary key and is generated using cuid()
+// The email field is unique, ensuring that no two users can have the same email address
+// The password field is used for authentication
+// The Content field is an array of Content objects associated with the user
+// The Link field is an array of Link objects associated with the user
+// The User model is used to manage user accounts and their associated content
+// The sharable field indicates whether the user has enabled sharing
+// The sharableLink field is a unique identifier for the sharable link
+
+model User {
+  id           String   @id @default(cuid()) // Unique ID for each user
+  username     String?
+  email        String?  @unique
+  password     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sharable     Boolean  @default(false) // Indicates if the user has enabled sharing
+  sharableLink String?  @unique // Unique identifier for the sharable link
+
+  Content Content[]
+  Link    Link[]
+}
+
+// -------------------------------------------------------------------------------------------------
+// Link model
+// -------------------------------------------------------------------------------------------------
+// This model represents a link to an external resource
+// It includes fields for the authorId, timestamps, and a relation to the User model
+// The authorId field is a foreign key referencing the User model
+// The author field establishes a relation to the User model
+// The Content field is an array of Content objects associated with the link
+// The hash field is a unique identifier for the link
+
+model Link {
+  hash      String   @id @default(cuid()) // Unique ID for each link
+  authorId  String // Foreign key referencing User.id
+  author    User     @relation(fields: [authorId], references: [id]) // Relation to User model
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -------------------------------------------------------------------------------------------------
+// Content model
+// -------------------------------------------------------------------------------------------------
+// This model represents a piece of content created by a user
+// It includes fields for the title, body, link, tags, type, and timestamps
+// The authorId field is a foreign key referencing the User model
+// The author field establishes a relation to the User model
+// The tags field is an array of strings representing the tags associated with the content
+// The type field indicates the type of content (e.g., article, video, etc.)
+
+model Content {
+  id        String   @id @default(cuid()) //Unique ID for each content
+  title     String
+  body      String
+  tags      Tag[]    @relation("ContentTags") // Many-to-many relation with Tag
+  type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  authorId  String // Foreign key referencing User.id
+  author    User     @relation(fields: [authorId], references: [id]) // Relation to User model
+}
+
+// -------------------------------------------------------------------------------------------------
+// Tag model
+// -------------------------------------------------------------------------------------------------
+// This model represents a tag associated with content
+// It includes fields for the tag name, timestamps, and a relation to the Content model
+// The id field is the primary key and is generated using cuid()
+// The name field is unique, ensuring that no two tags can have the same name
+// The Content field is an array of Content objects associated with the tag
+// The Tag model is used to manage tags associated with content
+
+model Tag {
+  id        String   @id @default(cuid())
+  tagName   String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Content Content[] @relation("ContentTags")
+}
