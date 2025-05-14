@@ -59,6 +59,7 @@ export const login = async (req: Request<{}, {}, LoginRequestBody>, res: Respons
   try {
     // Find the user by email
     const user = await prisma.user.findUnique({ where: { email } });
+    // console.log(user);
     if (!user) {
       res.status(400).json({ error: "Invalid email or password" });
       return;
@@ -74,7 +75,7 @@ export const login = async (req: Request<{}, {}, LoginRequestBody>, res: Respons
     // Generate a JWT token
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
 
-    res.status(200).json({ message: "Login successful", token, userId: user.id });
+    res.status(200).json({ message: "Login successful", token, userId: user.id, username: user.username });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

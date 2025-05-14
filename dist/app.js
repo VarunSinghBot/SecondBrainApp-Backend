@@ -37,4 +37,16 @@ app.use("/api/v1/users", user_route_1.default);
 app.use("/api/v1/content", content_route_1.default);
 app.use("/api/v1/tags", tag_route_1.default);
 app.use("/api/v1/links", link_route_1.default);
+// Root endpoint to list all available endpoints
+app.get("/", (req, res) => {
+    res.json({
+        message: "Welcome to the API!",
+        endpoints: {
+            users: "/api/v1/users",
+            content: "/api/v1/content",
+            tags: "/api/v1/tags",
+            links: "/api/v1/links",
+        },
+    });
+});
 exports.default = app;

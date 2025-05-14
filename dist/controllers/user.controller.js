@@ -66,7 +66,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Generate a JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
-        res.status(200).json({ message: "Login successful", token });
+        res.status(200).json({ message: "Login successful", token, userId: user.id });
     }
     catch (error) {
         res.status(500).json({ error: "Internal server error" });
