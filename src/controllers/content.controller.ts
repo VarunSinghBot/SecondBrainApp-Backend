@@ -4,11 +4,19 @@ import { PrismaClient } from "../generated/prisma";
 const prisma = new PrismaClient();
 
 // ------------------------- Create Content ----------------------------
-export const createContent = async (req: Request, res: Response) => {
-  const { title, body, tags, type, authorId } = req.body;
+export const createContent = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { title, body, tags, type } = req.body;
+  const uid = req.user;
+
+  if (!uid) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
 
   try {
-    // Ensure tags exist or create them
     const tagRecords = await Promise.all(
       tags.map(async (tagName: string) => {
         let tag = await prisma.tag.findUnique({ where: { tagName } });
@@ -19,13 +27,12 @@ export const createContent = async (req: Request, res: Response) => {
       })
     );
 
-    // Create content and associate tags
     const content = await prisma.content.create({
       data: {
         title,
         body,
         type,
-        authorId,
+        authorId: uid,
         tags: {
           connect: tagRecords.map((tag) => ({ id: tag.id })),
         },
@@ -104,7 +111,9 @@ export const updateContent = async (req: Request, res: Response) => {
       data,
     });
 
-    res.status(200).json({ message: "Content updated successfully", updatedContent });
+    res
+      .status(200)
+      .json({ message: "Content updated successfully", updatedContent });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
