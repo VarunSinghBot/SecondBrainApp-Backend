@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import { verify } from "jsonwebtoken";
 
-// Extend the Express Request interface to include the userId
+// Extend the Request interface to include the user property
 declare global {
   namespace Express {
     interface Request {
-      user?: string; // Storing userId only as a string
+      user?: string; // Attach the userId to the request object
     }
   }
 }
@@ -13,7 +13,7 @@ declare global {
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
 if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not defined in environment variables.");
+  throw new Error("JWT_SECRET is not defined");
 }
 
 export const authenticate = (
@@ -23,19 +23,22 @@ export const authenticate = (
 ): void => {
   const authHeader = req.headers.authorization;
 
+  // Check if the Authorization header is present and starts with "Bearer"
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     res.status(401).json({ message: "Unauthorized: Token missing" });
     return;
   }
 
-  const token = authHeader.split(" ")[1];
+  const token = authHeader.split(" ")[1]; // Extract the token
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as {
-      userId: string;
-    };
+    // Verify the token and decode it
+    const decoded = verify(token, JWT_SECRET) as { userId: string };
 
+    // Attach the userId to the request object
     req.user = decoded.userId;
+
+    // Pass control to the next middleware or route handler
     next();
   } catch (error) {
     res.status(401).json({ message: "Unauthorized: Invalid token" });

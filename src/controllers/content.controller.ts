@@ -4,12 +4,9 @@ import { PrismaClient } from "../generated/prisma";
 const prisma = new PrismaClient();
 
 // ------------------------- Create Content ----------------------------
-export const createContent = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createContent = async (req: Request, res: Response): Promise<void> => {
   const { title, body, tags, type } = req.body;
-  const uid = req.user;
+  const uid = req.user; // Extract userId from the token (set by authenticate middleware)
 
   if (!uid) {
     res.status(401).json({ error: "Unauthorized" });
@@ -46,11 +43,21 @@ export const createContent = async (
 };
 
 // ------------------------- Get All Content ----------------------------
-export const getAllContent = async (req: Request, res: Response) => {
+export const getAllContent = async (req: Request, res: Response): Promise<void> => {
+  const uid = req.user; // Extract userId from the token (set by authenticate middleware)
+
+  if (!uid) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+
   try {
+    // Fetch content specific to the authenticated user
     const contents = await prisma.content.findMany({
+      where: { authorId: uid },
       include: { tags: true, author: true },
     });
+
     res.status(200).json(contents);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
@@ -58,7 +65,7 @@ export const getAllContent = async (req: Request, res: Response) => {
 };
 
 // ------------------------- Get Content by ID ----------------------------
-export const getContentById = async (req: Request, res: Response) => {
+export const getContentById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -79,11 +86,24 @@ export const getContentById = async (req: Request, res: Response) => {
 };
 
 // ------------------------- Update Content ----------------------------
-export const updateContent = async (req: Request, res: Response) => {
+export const updateContent = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const { title, body, tags, type } = req.body;
+  const uid = req.user; // Extract userId from the token (set by authenticate middleware)
+
+  if (!uid) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
 
   try {
+    const existingContent = await prisma.content.findUnique({ where: { id } });
+
+    if (!existingContent || existingContent.authorId !== uid) {
+      res.status(403).json({ error: "Forbidden: You are not allowed to update this content" });
+      return;
+    }
+
     const data: any = {};
     if (title) data.title = title;
     if (body) data.body = body;
@@ -111,19 +131,30 @@ export const updateContent = async (req: Request, res: Response) => {
       data,
     });
 
-    res
-      .status(200)
-      .json({ message: "Content updated successfully", updatedContent });
+    res.status(200).json({ message: "Content updated successfully", updatedContent });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
 // ------------------------- Delete Content ----------------------------
-export const deleteContent = async (req: Request, res: Response) => {
+export const deleteContent = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
+  const uid = req.user; // Extract userId from the token (set by authenticate middleware)
+
+  if (!uid) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
 
   try {
+    const existingContent = await prisma.content.findUnique({ where: { id } });
+
+    if (!existingContent || existingContent.authorId !== uid) {
+      res.status(403).json({ error: "Forbidden: You are not allowed to delete this content" });
+      return;
+    }
+
     await prisma.content.delete({ where: { id } });
     res.status(200).json({ message: "Content deleted successfully" });
   } catch (error) {
