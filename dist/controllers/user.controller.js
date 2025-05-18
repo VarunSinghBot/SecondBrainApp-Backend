@@ -54,6 +54,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Find the user by email
         const user = yield prisma.user.findUnique({ where: { email } });
+        // console.log(user);
         if (!user) {
             res.status(400).json({ error: "Invalid email or password" });
             return;
@@ -66,7 +67,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         // Generate a JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1h" });
-        res.status(200).json({ message: "Login successful", token, userId: user.id });
+        res.status(200).json({ message: "Login successful", token, userId: user.id, username: user.username });
     }
     catch (error) {
         res.status(500).json({ error: "Internal server error" });

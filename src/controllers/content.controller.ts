@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 
 // ------------------------- Create Content ----------------------------
 export const createContent = async (req: Request, res: Response): Promise<void> => {
-  const { title, body, tags, type } = req.body;
-  const uid = req.user; // Extract userId from the token (set by authenticate middleware)
+  const { title, body, tags, type, mediaUrl } = req.body;
+  const uid = req.user;
 
   if (!uid) {
     res.status(401).json({ error: "Unauthorized" });
@@ -16,25 +16,30 @@ export const createContent = async (req: Request, res: Response): Promise<void> 
   try {
     const tagRecords = await Promise.all(
       tags.map(async (tagName: string) => {
-        let tag = await prisma.tag.findUnique({ where: { tagName } });
+        let tag = await prisma.tag.findUnique({ where: { tagName: tagName.toLowerCase() } });
         if (!tag) {
-          tag = await prisma.tag.create({ data: { tagName } });
+          tag = await prisma.tag.create({ data: { tagName: tagName.toLowerCase() } });
         }
         return tag;
       })
     );
 
-    const content = await prisma.content.create({
-      data: {
-        title,
-        body,
-        type,
-        authorId: uid,
-        tags: {
-          connect: tagRecords.map((tag) => ({ id: tag.id })),
-        },
+    const data: any = {
+      title,
+      body,
+      type,
+      authorId: uid,
+      tags: {
+        connect: tagRecords.map((tag) => ({ id: tag.id })),
       },
-    });
+    };
+
+    // Only add mediaUrl if present and type is not article
+    if (mediaUrl && type !== "article") {
+      data.mediaUrl = mediaUrl;
+    }
+
+    const content = await prisma.content.create({ data });
 
     res.status(201).json({ message: "Content created successfully", content });
   } catch (error) {
@@ -67,6 +72,12 @@ export const getAllContent = async (req: Request, res: Response): Promise<void> 
 // ------------------------- Get Content by ID ----------------------------
 export const getContentById = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
+  const uid = req.user; // Extract userId from the token (set by authenticate middleware)
+
+  if (!uid) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
 
   try {
     const content = await prisma.content.findUnique({
@@ -79,6 +90,11 @@ export const getContentById = async (req: Request, res: Response): Promise<void>
       return;
     }
 
+    if (content.authorId !== uid) {
+      res.status(403).json({ error: "Forbidden: You are not allowed to access this content" });
+      return;
+    }
+
     res.status(200).json(content);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
@@ -88,7 +104,7 @@ export const getContentById = async (req: Request, res: Response): Promise<void>
 // ------------------------- Update Content ----------------------------
 export const updateContent = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
-  const { title, body, tags, type } = req.body;
+  const { title, body, tags, type, mediaUrl } = req.body;
   const uid = req.user; // Extract userId from the token (set by authenticate middleware)
 
   if (!uid) {
@@ -108,13 +124,14 @@ export const updateContent = async (req: Request, res: Response): Promise<void> 
     if (title) data.title = title;
     if (body) data.body = body;
     if (type) data.type = type;
+    if (mediaUrl && type !== "article") data.mediaUrl = mediaUrl;
 
     if (tags) {
       const tagRecords = await Promise.all(
         tags.map(async (tagName: string) => {
-          let tag = await prisma.tag.findUnique({ where: { tagName } });
+          let tag = await prisma.tag.findUnique({ where: { tagName: tagName.toLowerCase() } });
           if (!tag) {
-            tag = await prisma.tag.create({ data: { tagName } });
+            tag = await prisma.tag.create({ data: { tagName: tagName.toLowerCase() } });
           }
           return tag;
         })

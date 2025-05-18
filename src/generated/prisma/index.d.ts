@@ -1178,15 +1178,48 @@ export namespace Prisma {
 
 
   /**
+   * Count Type LinkCountOutputType
+   */
+
+  export type LinkCountOutputType = {
+    contents: number
+  }
+
+  export type LinkCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contents?: boolean | LinkCountOutputTypeCountContentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LinkCountOutputType without action
+   */
+  export type LinkCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LinkCountOutputType
+     */
+    select?: LinkCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LinkCountOutputType without action
+   */
+  export type LinkCountOutputTypeCountContentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ContentWhereInput
+  }
+
+
+  /**
    * Count Type ContentCountOutputType
    */
 
   export type ContentCountOutputType = {
     tags: number
+    links: number
   }
 
   export type ContentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tags?: boolean | ContentCountOutputTypeCountTagsArgs
+    links?: boolean | ContentCountOutputTypeCountLinksArgs
   }
 
   // Custom InputTypes
@@ -1205,6 +1238,13 @@ export namespace Prisma {
    */
   export type ContentCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TagWhereInput
+  }
+
+  /**
+   * ContentCountOutputType without action
+   */
+  export type ContentCountOutputTypeCountLinksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LinkWhereInput
   }
 
 
@@ -2537,6 +2577,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
+    contents?: boolean | Link$contentsArgs<ExtArgs>
+    _count?: boolean | LinkCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["link"]>
 
   export type LinkSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2565,6 +2607,8 @@ export namespace Prisma {
   export type LinkOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"hash" | "authorId" | "createdAt" | "updatedAt", ExtArgs["result"]["link"]>
   export type LinkInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
+    contents?: boolean | Link$contentsArgs<ExtArgs>
+    _count?: boolean | LinkCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type LinkIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
@@ -2577,6 +2621,7 @@ export namespace Prisma {
     name: "Link"
     objects: {
       author: Prisma.$UserPayload<ExtArgs>
+      contents: Prisma.$ContentPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       hash: string
@@ -2978,6 +3023,7 @@ export namespace Prisma {
   export interface Prisma__LinkClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    contents<T extends Link$contentsArgs<ExtArgs> = {}>(args?: Subset<T, Link$contentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ContentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3407,6 +3453,30 @@ export namespace Prisma {
   }
 
   /**
+   * Link.contents
+   */
+  export type Link$contentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Content
+     */
+    select?: ContentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Content
+     */
+    omit?: ContentOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ContentInclude<ExtArgs> | null
+    where?: ContentWhereInput
+    orderBy?: ContentOrderByWithRelationInput | ContentOrderByWithRelationInput[]
+    cursor?: ContentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ContentScalarFieldEnum | ContentScalarFieldEnum[]
+  }
+
+  /**
    * Link without action
    */
   export type LinkDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3440,6 +3510,7 @@ export namespace Prisma {
     title: string | null
     body: string | null
     type: string | null
+    mediaUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
     authorId: string | null
@@ -3450,6 +3521,7 @@ export namespace Prisma {
     title: string | null
     body: string | null
     type: string | null
+    mediaUrl: string | null
     createdAt: Date | null
     updatedAt: Date | null
     authorId: string | null
@@ -3460,6 +3532,7 @@ export namespace Prisma {
     title: number
     body: number
     type: number
+    mediaUrl: number
     createdAt: number
     updatedAt: number
     authorId: number
@@ -3472,6 +3545,7 @@ export namespace Prisma {
     title?: true
     body?: true
     type?: true
+    mediaUrl?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -3482,6 +3556,7 @@ export namespace Prisma {
     title?: true
     body?: true
     type?: true
+    mediaUrl?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -3492,6 +3567,7 @@ export namespace Prisma {
     title?: true
     body?: true
     type?: true
+    mediaUrl?: true
     createdAt?: true
     updatedAt?: true
     authorId?: true
@@ -3575,6 +3651,7 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl: string | null
     createdAt: Date
     updatedAt: Date
     authorId: string
@@ -3602,11 +3679,13 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     type?: boolean
+    mediaUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
     tags?: boolean | Content$tagsArgs<ExtArgs>
     author?: boolean | UserDefaultArgs<ExtArgs>
+    links?: boolean | Content$linksArgs<ExtArgs>
     _count?: boolean | ContentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["content"]>
 
@@ -3615,6 +3694,7 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     type?: boolean
+    mediaUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -3626,6 +3706,7 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     type?: boolean
+    mediaUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
@@ -3637,15 +3718,17 @@ export namespace Prisma {
     title?: boolean
     body?: boolean
     type?: boolean
+    mediaUrl?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     authorId?: boolean
   }
 
-  export type ContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "body" | "type" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["content"]>
+  export type ContentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "body" | "type" | "mediaUrl" | "createdAt" | "updatedAt" | "authorId", ExtArgs["result"]["content"]>
   export type ContentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tags?: boolean | Content$tagsArgs<ExtArgs>
     author?: boolean | UserDefaultArgs<ExtArgs>
+    links?: boolean | Content$linksArgs<ExtArgs>
     _count?: boolean | ContentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ContentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3660,12 +3743,14 @@ export namespace Prisma {
     objects: {
       tags: Prisma.$TagPayload<ExtArgs>[]
       author: Prisma.$UserPayload<ExtArgs>
+      links: Prisma.$LinkPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       title: string
       body: string
       type: string
+      mediaUrl: string | null
       createdAt: Date
       updatedAt: Date
       authorId: string
@@ -4065,6 +4150,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tags<T extends Content$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Content$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    links<T extends Content$linksArgs<ExtArgs> = {}>(args?: Subset<T, Content$linksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LinkPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4098,6 +4184,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Content", 'String'>
     readonly body: FieldRef<"Content", 'String'>
     readonly type: FieldRef<"Content", 'String'>
+    readonly mediaUrl: FieldRef<"Content", 'String'>
     readonly createdAt: FieldRef<"Content", 'DateTime'>
     readonly updatedAt: FieldRef<"Content", 'DateTime'>
     readonly authorId: FieldRef<"Content", 'String'>
@@ -4518,6 +4605,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: TagScalarFieldEnum | TagScalarFieldEnum[]
+  }
+
+  /**
+   * Content.links
+   */
+  export type Content$linksArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Link
+     */
+    select?: LinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Link
+     */
+    omit?: LinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LinkInclude<ExtArgs> | null
+    where?: LinkWhereInput
+    orderBy?: LinkOrderByWithRelationInput | LinkOrderByWithRelationInput[]
+    cursor?: LinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LinkScalarFieldEnum | LinkScalarFieldEnum[]
   }
 
   /**
@@ -5639,6 +5750,7 @@ export namespace Prisma {
     title: 'title',
     body: 'body',
     type: 'type',
+    mediaUrl: 'mediaUrl',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     authorId: 'authorId'
@@ -5820,6 +5932,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Link"> | Date | string
     updatedAt?: DateTimeFilter<"Link"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
+    contents?: ContentListRelationFilter
   }
 
   export type LinkOrderByWithRelationInput = {
@@ -5828,6 +5941,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     author?: UserOrderByWithRelationInput
+    contents?: ContentOrderByRelationAggregateInput
   }
 
   export type LinkWhereUniqueInput = Prisma.AtLeast<{
@@ -5839,6 +5953,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Link"> | Date | string
     updatedAt?: DateTimeFilter<"Link"> | Date | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
+    contents?: ContentListRelationFilter
   }, "hash">
 
   export type LinkOrderByWithAggregationInput = {
@@ -5869,11 +5984,13 @@ export namespace Prisma {
     title?: StringFilter<"Content"> | string
     body?: StringFilter<"Content"> | string
     type?: StringFilter<"Content"> | string
+    mediaUrl?: StringNullableFilter<"Content"> | string | null
     createdAt?: DateTimeFilter<"Content"> | Date | string
     updatedAt?: DateTimeFilter<"Content"> | Date | string
     authorId?: StringFilter<"Content"> | string
     tags?: TagListRelationFilter
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
+    links?: LinkListRelationFilter
   }
 
   export type ContentOrderByWithRelationInput = {
@@ -5881,11 +5998,13 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     type?: SortOrder
+    mediaUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
     tags?: TagOrderByRelationAggregateInput
     author?: UserOrderByWithRelationInput
+    links?: LinkOrderByRelationAggregateInput
   }
 
   export type ContentWhereUniqueInput = Prisma.AtLeast<{
@@ -5896,11 +6015,13 @@ export namespace Prisma {
     title?: StringFilter<"Content"> | string
     body?: StringFilter<"Content"> | string
     type?: StringFilter<"Content"> | string
+    mediaUrl?: StringNullableFilter<"Content"> | string | null
     createdAt?: DateTimeFilter<"Content"> | Date | string
     updatedAt?: DateTimeFilter<"Content"> | Date | string
     authorId?: StringFilter<"Content"> | string
     tags?: TagListRelationFilter
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
+    links?: LinkListRelationFilter
   }, "id">
 
   export type ContentOrderByWithAggregationInput = {
@@ -5908,6 +6029,7 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     type?: SortOrder
+    mediaUrl?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -5924,6 +6046,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Content"> | string
     body?: StringWithAggregatesFilter<"Content"> | string
     type?: StringWithAggregatesFilter<"Content"> | string
+    mediaUrl?: StringNullableWithAggregatesFilter<"Content"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Content"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Content"> | Date | string
     authorId?: StringWithAggregatesFilter<"Content"> | string
@@ -6069,6 +6192,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutLinkInput
+    contents?: ContentCreateNestedManyWithoutLinksInput
   }
 
   export type LinkUncheckedCreateInput = {
@@ -6076,6 +6200,7 @@ export namespace Prisma {
     authorId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    contents?: ContentUncheckedCreateNestedManyWithoutLinksInput
   }
 
   export type LinkUpdateInput = {
@@ -6083,6 +6208,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutLinkNestedInput
+    contents?: ContentUpdateManyWithoutLinksNestedInput
   }
 
   export type LinkUncheckedUpdateInput = {
@@ -6090,6 +6216,7 @@ export namespace Prisma {
     authorId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contents?: ContentUncheckedUpdateManyWithoutLinksNestedInput
   }
 
   export type LinkCreateManyInput = {
@@ -6117,10 +6244,12 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tags?: TagCreateNestedManyWithoutContentInput
     author: UserCreateNestedOneWithoutContentInput
+    links?: LinkCreateNestedManyWithoutContentsInput
   }
 
   export type ContentUncheckedCreateInput = {
@@ -6128,10 +6257,12 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
     tags?: TagUncheckedCreateNestedManyWithoutContentInput
+    links?: LinkUncheckedCreateNestedManyWithoutContentsInput
   }
 
   export type ContentUpdateInput = {
@@ -6139,10 +6270,12 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: TagUpdateManyWithoutContentNestedInput
     author?: UserUpdateOneRequiredWithoutContentNestedInput
+    links?: LinkUpdateManyWithoutContentsNestedInput
   }
 
   export type ContentUncheckedUpdateInput = {
@@ -6150,10 +6283,12 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
     tags?: TagUncheckedUpdateManyWithoutContentNestedInput
+    links?: LinkUncheckedUpdateManyWithoutContentsNestedInput
   }
 
   export type ContentCreateManyInput = {
@@ -6161,6 +6296,7 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
@@ -6171,6 +6307,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6180,6 +6317,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
@@ -6441,6 +6579,7 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     type?: SortOrder
+    mediaUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -6451,6 +6590,7 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     type?: SortOrder
+    mediaUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -6461,6 +6601,7 @@ export namespace Prisma {
     title?: SortOrder
     body?: SortOrder
     type?: SortOrder
+    mediaUrl?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     authorId?: SortOrder
@@ -6593,12 +6734,50 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type ContentCreateNestedManyWithoutLinksInput = {
+    create?: XOR<ContentCreateWithoutLinksInput, ContentUncheckedCreateWithoutLinksInput> | ContentCreateWithoutLinksInput[] | ContentUncheckedCreateWithoutLinksInput[]
+    connectOrCreate?: ContentCreateOrConnectWithoutLinksInput | ContentCreateOrConnectWithoutLinksInput[]
+    connect?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+  }
+
+  export type ContentUncheckedCreateNestedManyWithoutLinksInput = {
+    create?: XOR<ContentCreateWithoutLinksInput, ContentUncheckedCreateWithoutLinksInput> | ContentCreateWithoutLinksInput[] | ContentUncheckedCreateWithoutLinksInput[]
+    connectOrCreate?: ContentCreateOrConnectWithoutLinksInput | ContentCreateOrConnectWithoutLinksInput[]
+    connect?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+  }
+
   export type UserUpdateOneRequiredWithoutLinkNestedInput = {
     create?: XOR<UserCreateWithoutLinkInput, UserUncheckedCreateWithoutLinkInput>
     connectOrCreate?: UserCreateOrConnectWithoutLinkInput
     upsert?: UserUpsertWithoutLinkInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutLinkInput, UserUpdateWithoutLinkInput>, UserUncheckedUpdateWithoutLinkInput>
+  }
+
+  export type ContentUpdateManyWithoutLinksNestedInput = {
+    create?: XOR<ContentCreateWithoutLinksInput, ContentUncheckedCreateWithoutLinksInput> | ContentCreateWithoutLinksInput[] | ContentUncheckedCreateWithoutLinksInput[]
+    connectOrCreate?: ContentCreateOrConnectWithoutLinksInput | ContentCreateOrConnectWithoutLinksInput[]
+    upsert?: ContentUpsertWithWhereUniqueWithoutLinksInput | ContentUpsertWithWhereUniqueWithoutLinksInput[]
+    set?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    disconnect?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    delete?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    connect?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    update?: ContentUpdateWithWhereUniqueWithoutLinksInput | ContentUpdateWithWhereUniqueWithoutLinksInput[]
+    updateMany?: ContentUpdateManyWithWhereWithoutLinksInput | ContentUpdateManyWithWhereWithoutLinksInput[]
+    deleteMany?: ContentScalarWhereInput | ContentScalarWhereInput[]
+  }
+
+  export type ContentUncheckedUpdateManyWithoutLinksNestedInput = {
+    create?: XOR<ContentCreateWithoutLinksInput, ContentUncheckedCreateWithoutLinksInput> | ContentCreateWithoutLinksInput[] | ContentUncheckedCreateWithoutLinksInput[]
+    connectOrCreate?: ContentCreateOrConnectWithoutLinksInput | ContentCreateOrConnectWithoutLinksInput[]
+    upsert?: ContentUpsertWithWhereUniqueWithoutLinksInput | ContentUpsertWithWhereUniqueWithoutLinksInput[]
+    set?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    disconnect?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    delete?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    connect?: ContentWhereUniqueInput | ContentWhereUniqueInput[]
+    update?: ContentUpdateWithWhereUniqueWithoutLinksInput | ContentUpdateWithWhereUniqueWithoutLinksInput[]
+    updateMany?: ContentUpdateManyWithWhereWithoutLinksInput | ContentUpdateManyWithWhereWithoutLinksInput[]
+    deleteMany?: ContentScalarWhereInput | ContentScalarWhereInput[]
   }
 
   export type TagCreateNestedManyWithoutContentInput = {
@@ -6613,10 +6792,22 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type LinkCreateNestedManyWithoutContentsInput = {
+    create?: XOR<LinkCreateWithoutContentsInput, LinkUncheckedCreateWithoutContentsInput> | LinkCreateWithoutContentsInput[] | LinkUncheckedCreateWithoutContentsInput[]
+    connectOrCreate?: LinkCreateOrConnectWithoutContentsInput | LinkCreateOrConnectWithoutContentsInput[]
+    connect?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+  }
+
   export type TagUncheckedCreateNestedManyWithoutContentInput = {
     create?: XOR<TagCreateWithoutContentInput, TagUncheckedCreateWithoutContentInput> | TagCreateWithoutContentInput[] | TagUncheckedCreateWithoutContentInput[]
     connectOrCreate?: TagCreateOrConnectWithoutContentInput | TagCreateOrConnectWithoutContentInput[]
     connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+  }
+
+  export type LinkUncheckedCreateNestedManyWithoutContentsInput = {
+    create?: XOR<LinkCreateWithoutContentsInput, LinkUncheckedCreateWithoutContentsInput> | LinkCreateWithoutContentsInput[] | LinkUncheckedCreateWithoutContentsInput[]
+    connectOrCreate?: LinkCreateOrConnectWithoutContentsInput | LinkCreateOrConnectWithoutContentsInput[]
+    connect?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
   }
 
   export type TagUpdateManyWithoutContentNestedInput = {
@@ -6640,6 +6831,19 @@ export namespace Prisma {
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutContentInput, UserUpdateWithoutContentInput>, UserUncheckedUpdateWithoutContentInput>
   }
 
+  export type LinkUpdateManyWithoutContentsNestedInput = {
+    create?: XOR<LinkCreateWithoutContentsInput, LinkUncheckedCreateWithoutContentsInput> | LinkCreateWithoutContentsInput[] | LinkUncheckedCreateWithoutContentsInput[]
+    connectOrCreate?: LinkCreateOrConnectWithoutContentsInput | LinkCreateOrConnectWithoutContentsInput[]
+    upsert?: LinkUpsertWithWhereUniqueWithoutContentsInput | LinkUpsertWithWhereUniqueWithoutContentsInput[]
+    set?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    disconnect?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    delete?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    connect?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    update?: LinkUpdateWithWhereUniqueWithoutContentsInput | LinkUpdateWithWhereUniqueWithoutContentsInput[]
+    updateMany?: LinkUpdateManyWithWhereWithoutContentsInput | LinkUpdateManyWithWhereWithoutContentsInput[]
+    deleteMany?: LinkScalarWhereInput | LinkScalarWhereInput[]
+  }
+
   export type TagUncheckedUpdateManyWithoutContentNestedInput = {
     create?: XOR<TagCreateWithoutContentInput, TagUncheckedCreateWithoutContentInput> | TagCreateWithoutContentInput[] | TagUncheckedCreateWithoutContentInput[]
     connectOrCreate?: TagCreateOrConnectWithoutContentInput | TagCreateOrConnectWithoutContentInput[]
@@ -6651,6 +6855,19 @@ export namespace Prisma {
     update?: TagUpdateWithWhereUniqueWithoutContentInput | TagUpdateWithWhereUniqueWithoutContentInput[]
     updateMany?: TagUpdateManyWithWhereWithoutContentInput | TagUpdateManyWithWhereWithoutContentInput[]
     deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
+  }
+
+  export type LinkUncheckedUpdateManyWithoutContentsNestedInput = {
+    create?: XOR<LinkCreateWithoutContentsInput, LinkUncheckedCreateWithoutContentsInput> | LinkCreateWithoutContentsInput[] | LinkUncheckedCreateWithoutContentsInput[]
+    connectOrCreate?: LinkCreateOrConnectWithoutContentsInput | LinkCreateOrConnectWithoutContentsInput[]
+    upsert?: LinkUpsertWithWhereUniqueWithoutContentsInput | LinkUpsertWithWhereUniqueWithoutContentsInput[]
+    set?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    disconnect?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    delete?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    connect?: LinkWhereUniqueInput | LinkWhereUniqueInput[]
+    update?: LinkUpdateWithWhereUniqueWithoutContentsInput | LinkUpdateWithWhereUniqueWithoutContentsInput[]
+    updateMany?: LinkUpdateManyWithWhereWithoutContentsInput | LinkUpdateManyWithWhereWithoutContentsInput[]
+    deleteMany?: LinkScalarWhereInput | LinkScalarWhereInput[]
   }
 
   export type ContentCreateNestedManyWithoutTagsInput = {
@@ -6818,9 +7035,11 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tags?: TagCreateNestedManyWithoutContentInput
+    links?: LinkCreateNestedManyWithoutContentsInput
   }
 
   export type ContentUncheckedCreateWithoutAuthorInput = {
@@ -6828,9 +7047,11 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     tags?: TagUncheckedCreateNestedManyWithoutContentInput
+    links?: LinkUncheckedCreateNestedManyWithoutContentsInput
   }
 
   export type ContentCreateOrConnectWithoutAuthorInput = {
@@ -6847,12 +7068,14 @@ export namespace Prisma {
     hash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    contents?: ContentCreateNestedManyWithoutLinksInput
   }
 
   export type LinkUncheckedCreateWithoutAuthorInput = {
     hash?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    contents?: ContentUncheckedCreateNestedManyWithoutLinksInput
   }
 
   export type LinkCreateOrConnectWithoutAuthorInput = {
@@ -6889,6 +7112,7 @@ export namespace Prisma {
     title?: StringFilter<"Content"> | string
     body?: StringFilter<"Content"> | string
     type?: StringFilter<"Content"> | string
+    mediaUrl?: StringNullableFilter<"Content"> | string | null
     createdAt?: DateTimeFilter<"Content"> | Date | string
     updatedAt?: DateTimeFilter<"Content"> | Date | string
     authorId?: StringFilter<"Content"> | string
@@ -6949,6 +7173,35 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutLinkInput, UserUncheckedCreateWithoutLinkInput>
   }
 
+  export type ContentCreateWithoutLinksInput = {
+    id?: string
+    title: string
+    body: string
+    type: string
+    mediaUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    tags?: TagCreateNestedManyWithoutContentInput
+    author: UserCreateNestedOneWithoutContentInput
+  }
+
+  export type ContentUncheckedCreateWithoutLinksInput = {
+    id?: string
+    title: string
+    body: string
+    type: string
+    mediaUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    authorId: string
+    tags?: TagUncheckedCreateNestedManyWithoutContentInput
+  }
+
+  export type ContentCreateOrConnectWithoutLinksInput = {
+    where: ContentWhereUniqueInput
+    create: XOR<ContentCreateWithoutLinksInput, ContentUncheckedCreateWithoutLinksInput>
+  }
+
   export type UserUpsertWithoutLinkInput = {
     update: XOR<UserUpdateWithoutLinkInput, UserUncheckedUpdateWithoutLinkInput>
     create: XOR<UserCreateWithoutLinkInput, UserUncheckedCreateWithoutLinkInput>
@@ -6982,6 +7235,22 @@ export namespace Prisma {
     sharable?: BoolFieldUpdateOperationsInput | boolean
     sharableLink?: NullableStringFieldUpdateOperationsInput | string | null
     Content?: ContentUncheckedUpdateManyWithoutAuthorNestedInput
+  }
+
+  export type ContentUpsertWithWhereUniqueWithoutLinksInput = {
+    where: ContentWhereUniqueInput
+    update: XOR<ContentUpdateWithoutLinksInput, ContentUncheckedUpdateWithoutLinksInput>
+    create: XOR<ContentCreateWithoutLinksInput, ContentUncheckedCreateWithoutLinksInput>
+  }
+
+  export type ContentUpdateWithWhereUniqueWithoutLinksInput = {
+    where: ContentWhereUniqueInput
+    data: XOR<ContentUpdateWithoutLinksInput, ContentUncheckedUpdateWithoutLinksInput>
+  }
+
+  export type ContentUpdateManyWithWhereWithoutLinksInput = {
+    where: ContentScalarWhereInput
+    data: XOR<ContentUpdateManyMutationInput, ContentUncheckedUpdateManyWithoutLinksInput>
   }
 
   export type TagCreateWithoutContentInput = {
@@ -7030,6 +7299,25 @@ export namespace Prisma {
   export type UserCreateOrConnectWithoutContentInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutContentInput, UserUncheckedCreateWithoutContentInput>
+  }
+
+  export type LinkCreateWithoutContentsInput = {
+    hash?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutLinkInput
+  }
+
+  export type LinkUncheckedCreateWithoutContentsInput = {
+    hash?: string
+    authorId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LinkCreateOrConnectWithoutContentsInput = {
+    where: LinkWhereUniqueInput
+    create: XOR<LinkCreateWithoutContentsInput, LinkUncheckedCreateWithoutContentsInput>
   }
 
   export type TagUpsertWithWhereUniqueWithoutContentInput = {
@@ -7093,14 +7381,32 @@ export namespace Prisma {
     Link?: LinkUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
+  export type LinkUpsertWithWhereUniqueWithoutContentsInput = {
+    where: LinkWhereUniqueInput
+    update: XOR<LinkUpdateWithoutContentsInput, LinkUncheckedUpdateWithoutContentsInput>
+    create: XOR<LinkCreateWithoutContentsInput, LinkUncheckedCreateWithoutContentsInput>
+  }
+
+  export type LinkUpdateWithWhereUniqueWithoutContentsInput = {
+    where: LinkWhereUniqueInput
+    data: XOR<LinkUpdateWithoutContentsInput, LinkUncheckedUpdateWithoutContentsInput>
+  }
+
+  export type LinkUpdateManyWithWhereWithoutContentsInput = {
+    where: LinkScalarWhereInput
+    data: XOR<LinkUpdateManyMutationInput, LinkUncheckedUpdateManyWithoutContentsInput>
+  }
+
   export type ContentCreateWithoutTagsInput = {
     id?: string
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutContentInput
+    links?: LinkCreateNestedManyWithoutContentsInput
   }
 
   export type ContentUncheckedCreateWithoutTagsInput = {
@@ -7108,9 +7414,11 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
+    links?: LinkUncheckedCreateNestedManyWithoutContentsInput
   }
 
   export type ContentCreateOrConnectWithoutTagsInput = {
@@ -7139,6 +7447,7 @@ export namespace Prisma {
     title: string
     body: string
     type: string
+    mediaUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7154,9 +7463,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: TagUpdateManyWithoutContentNestedInput
+    links?: LinkUpdateManyWithoutContentsNestedInput
   }
 
   export type ContentUncheckedUpdateWithoutAuthorInput = {
@@ -7164,9 +7475,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     tags?: TagUncheckedUpdateManyWithoutContentNestedInput
+    links?: LinkUncheckedUpdateManyWithoutContentsNestedInput
   }
 
   export type ContentUncheckedUpdateManyWithoutAuthorInput = {
@@ -7174,6 +7487,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -7182,18 +7496,55 @@ export namespace Prisma {
     hash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contents?: ContentUpdateManyWithoutLinksNestedInput
   }
 
   export type LinkUncheckedUpdateWithoutAuthorInput = {
     hash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    contents?: ContentUncheckedUpdateManyWithoutLinksNestedInput
   }
 
   export type LinkUncheckedUpdateManyWithoutAuthorInput = {
     hash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ContentUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    tags?: TagUpdateManyWithoutContentNestedInput
+    author?: UserUpdateOneRequiredWithoutContentNestedInput
+  }
+
+  export type ContentUncheckedUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    tags?: TagUncheckedUpdateManyWithoutContentNestedInput
+  }
+
+  export type ContentUncheckedUpdateManyWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    body?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
   }
 
   export type TagUpdateWithoutContentInput = {
@@ -7217,14 +7568,37 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type LinkUpdateWithoutContentsInput = {
+    hash?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutLinkNestedInput
+  }
+
+  export type LinkUncheckedUpdateWithoutContentsInput = {
+    hash?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LinkUncheckedUpdateManyWithoutContentsInput = {
+    hash?: StringFieldUpdateOperationsInput | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ContentUpdateWithoutTagsInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutContentNestedInput
+    links?: LinkUpdateManyWithoutContentsNestedInput
   }
 
   export type ContentUncheckedUpdateWithoutTagsInput = {
@@ -7232,9 +7606,11 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
+    links?: LinkUncheckedUpdateManyWithoutContentsNestedInput
   }
 
   export type ContentUncheckedUpdateManyWithoutTagsInput = {
@@ -7242,6 +7618,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
+    mediaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string

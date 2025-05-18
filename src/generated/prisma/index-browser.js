@@ -143,6 +143,7 @@ exports.Prisma.ContentScalarFieldEnum = {
   title: 'title',
   body: 'body',
   type: 'type',
+  mediaUrl: 'mediaUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   authorId: 'authorId'
